@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <link rel="stylesheet" href="css/min.min.css">
+        <link rel="stylesheet" href="css/custom.css"/>
+    </head>
+
+    <div class="row">
+        <div class="col c4">‎</div>
+        <div class="col c5">
+
+
+            <div class="row">
+                <div class="col c4"><input type="text" id="usernameInput" name="usernameInput" placeholder="Username"></div>
+                <div class="col c4"><input type="text" id="shareCode" name="shareCode" placeholder="Sharecode"></div>
+                <div class="col c4"><input type="text" id="apiKey" name="apiKey" placeholder="API Key"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col c4">
+                    <b>Time</b>
+                    <span class="msi msi-length"></span>
+                    <input type="range" id="timeInput" name="timeInput" min="1" max="15" value="1" step="1">
+                </div>
+
+                <div class="col c4">
+                    <b>Strength</b>
+                    <span class="msi msi-dumbbell"></span>
+                    <input type="range" id="intentistyInput" name="intentistyInput" min="0" max="100" value="0" step="1">
+                </div>
+
+                <div class="col c4">
+                    <b>Rand Max</b>
+                    <span class="msi msi-random"></span>
+                    <input type="range" id="randmaxInput" name="randmaxInput" min="0" max="15" value="0" step="1">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col c4">
+                    <a class="btn btn-b smooth" onclick="shock()">&#9735;</a>
+                </div>
+
+                <div class="col c4">
+                    <a class="btn btn-a smooth" onclick="vibe()">&#128243;</a>
+                </div>
+
+                <div class="col c4">
+                    <a class="btn btn-c smooth" onclick="beep()">&#128264;</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <a class="btn btn-c smooth" onclick="saveInputs()">SAVE</a>
+    <script>
+        function setCookie(name, value, exp_days) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exp_days * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toGMTString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+        function saveInputs() {
+            var usernamevar = document.getElementById("usernameInput").value;
+            var apikeyvar = document.getElementById("apiKey").value;
+            var shareCodevar = document.getElementById("shareCode").value;
+
+            setCookie("username", usernamevar, 365);
+            setCookie("apikey", apikeyvar, 365);
+            setCookie("sharecode", shareCodevar, 365);
+        }
+        function loadInputs() {
+            if (document.cookie != "") {
+                cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    cookie = cookies[i].trim().split("=");
+                    if (cookie[0] == 'username') {
+                        document.getElementById("usernameInput").value = cookie[1];
+                    }
+                    if (cookie[0] == 'apikey') {
+                        document.getElementById("apiKey").value = cookie[1];
+                    }
+                    if (cookie[0] == 'sharecode') {
+                        document.getElementById("shareCode").value = cookie[1];
+                    }
+                }
+            }
+        }
+        function shock() {
+            var lengthvar = document.getElementById("timeInput").value;
+            var intentistyvar = document.getElementById("intentistyInput").value;
+            var usernamevar = document.getElementById("usernameInput").value;
+            var apikeyvar = document.getElementById("apiKey").value;
+            var shareCodevar = document.getElementById("shareCode").value;
+            // WARNING: For POST requests, body is set to null by browsers
+            const data = {
+                "Name": "MinShock",
+                "Username": usernamevar,
+                "Code": shareCodevar,
+                "Intensity": intentistyvar,
+                "Duration": lengthvar,
+                "Apikey": apikeyvar,
+                "Op": "0"
+            };
+            console.log(data)
+            sendCommand(data);
+        }
+        function vibe() {
+            var lengthvar = document.getElementById("timeInput").value;
+            var intentistyvar = document.getElementById("intentistyInput").value;
+            var usernamevar = document.getElementById("usernameInput").value;
+            var apikeyvar = document.getElementById("apiKey").value;
+            var shareCodevar = document.getElementById("shareCode").value;
+            // WARNING: For POST requests, body is set to null by browsers.
+
+            const data = {
+                "Name": "MinShock",
+                "Username": usernamevar,
+                "Code": shareCodevar,
+                "Intensity": intentistyvar,
+                "Duration": lengthvar,
+                "Apikey": apikeyvar,
+                "Op": "1"
+            };
+            console.log(data);
+            sendCommand(data);
+        }
+        function beep() {
+            var lengthvar = document.getElementById("timeInput").value;
+            var intentistyvar = document.getElementById("intentistyInput").value;
+            var usernamevar = document.getElementById("usernameInput").value;
+            var apikeyvar = document.getElementById("apiKey").value;
+            var shareCodevar = document.getElementById("shareCode").value;
+            // WARNING: For POST requests, body is set to null by browsers.
+            const data = {
+                "Name": "MinShock",
+                "Username": usernamevar,
+                "Code": shareCodevar,
+                "Intensity": intentistyvar,
+                "Duration": lengthvar,
+                "Apikey": apikeyvar,
+                "Op": "2"
+            };
+            console.log(data);
+            sendCommand(data);
+
+        }
+        function sendCommand(data){
+          var datatosend = JSON.stringify(data);
+          var xhr = new XMLHttpRequest();
+          xhr.withCredentials = false;
+          xhr.addEventListener("readystatechange", function () {
+              if (this.readyState === 4) {
+                  console.log(this.responseText);
+                }
+            });
+
+            xhr.open("POST", "https://do.pishock.com/api/apioperate");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(datatosend);
+        }
+    </script>
+</html>
